@@ -1,6 +1,6 @@
 ﻿using System;
-using CSharpPracticesApp.Delegates;
-using CSharpPracticesApp.Indexers;
+using CSharpPractices.Delegates;
+using CSharpPractices.Indexers;
 
 namespace CSharpPracticesApp
 {

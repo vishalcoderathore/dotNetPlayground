@@ -1,6 +1,6 @@
 using System;
 
-namespace CSharpPracticesApp.Delegates
+namespace CSharpPractices.Delegates
 {
     public delegate void Print(string message);
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace CSharpPracticesApp.Indexers
+namespace CSharpPractices.Indexers
 {
     public class SampleCollection<T>
     {
