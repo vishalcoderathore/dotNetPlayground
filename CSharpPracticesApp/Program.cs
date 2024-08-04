@@ -1,4 +1,5 @@
 ﻿using System;
+using CSharpPracticesApp.Delegates;
 using CSharpPracticesApp.Indexers;
 
 namespace CSharpPracticesApp
@@ -8,6 +9,7 @@ namespace CSharpPracticesApp
         static void Main(string[] args)
         {
             IndexerExample.Run();
+            DelegatesExample.Run();
         }
     }
 }
