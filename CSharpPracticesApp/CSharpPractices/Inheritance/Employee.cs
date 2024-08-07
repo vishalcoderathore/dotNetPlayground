@@ -13,6 +13,10 @@ public class Employee
         Department = department;
     }
 
+    public string GetHealthInsuranceAmount(){
+        return "Health Insurance Amount is : " + 500;
+    }
+
     public void DisplayEmployeeInfo()
     {
         Console.WriteLine($"Name: {Name}, Id: {Id}, Department: {Department}");
