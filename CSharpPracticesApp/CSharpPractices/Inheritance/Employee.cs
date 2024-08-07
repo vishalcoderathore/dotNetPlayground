@@ -17,6 +17,10 @@ public class Employee
         return "Health Insurance Amount is : " + 500;
     }
 
+    public virtual string GetRetirementBenefits(){
+        return "Retire at age " + 60;
+    }
+
     public void DisplayEmployeeInfo()
     {
         Console.WriteLine($"Name: {Name}, Id: {Id}, Department: {Department}");
