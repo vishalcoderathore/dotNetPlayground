@@ -13,6 +13,18 @@ namespace dotNetPlayground
             Console.WriteLine("WriteLine");
             Console.Write("Write");
             Console.Write("Write2");
+            Console.WriteLine("");
+
+            // Arrays
+            string[] myGrocceryArray = new string[2];
+
+            myGrocceryArray[0] = "First Array Value";
+            Console.WriteLine(myGrocceryArray[0]);
+            Console.WriteLine(myGrocceryArray[1]);
+
+            string[] mySecondArray = { "Apples", "Eggs" };
+            Console.WriteLine(mySecondArray[0]);
+            Console.WriteLine(mySecondArray[1]);
         }
     }
 }
