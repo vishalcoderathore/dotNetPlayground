@@ -37,6 +37,14 @@ namespace dotNetPlayground
             //IEnumerable
             IEnumerable<string> myGroceryEnumerable = myGroceryList;
             Console.WriteLine(myGroceryEnumerable.First());
+
+            //2d Arrays
+            string[,] myTwoDimensionalArray = new string[,]
+            {
+                { "2d-Apples", "2d-Eggs" },
+                { "2d-Milk", "2d-Cheese" }
+            };
+            Console.WriteLine(myTwoDimensionalArray[0, 0]);
         }
     }
 }
