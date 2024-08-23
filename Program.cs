@@ -6,15 +6,19 @@ namespace dotNetPlayground
     {
         protected Program() { }
 
+        private static int GetSum()
+        {
+            int[] intsToCompress = { 10, 15, 20, 25, 30, 12, 34 };
+            int totalValue = 0;
+            foreach (int intForCompression in intsToCompress)
+            {
+                totalValue += intForCompression;
+            }
+            return totalValue;
+        }
+
         public static void Main(string[] args)
         {
-            Console.Write("Write");
-            Console.Write("Write2");
-            Console.WriteLine("WriteLine");
-            Console.Write("Write");
-            Console.Write("Write2");
-            Console.WriteLine("");
-
             // Arrays
             string[] myGrocceryArray = new string[2];
 
@@ -52,6 +56,9 @@ namespace dotNetPlayground
                 { "dict-String", "dict-Dairy" }
             };
             Console.WriteLine(myGroceryDictionary["dict-String"]);
+
+            // Methods
+            Console.WriteLine(GetSum());
         }
     }
 }
