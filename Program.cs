@@ -45,6 +45,13 @@ namespace dotNetPlayground
                 { "2d-Milk", "2d-Cheese" }
             };
             Console.WriteLine(myTwoDimensionalArray[0, 0]);
+
+            // Dictionary
+            Dictionary<string, string> myGroceryDictionary = new Dictionary<string, string>()
+            {
+                { "dict-String", "dict-Dairy" }
+            };
+            Console.WriteLine(myGroceryDictionary["dict-String"]);
         }
     }
 }
