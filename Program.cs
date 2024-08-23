@@ -25,6 +25,18 @@ namespace dotNetPlayground
             string[] mySecondArray = { "Apples", "Eggs" };
             Console.WriteLine(mySecondArray[0]);
             Console.WriteLine(mySecondArray[1]);
+
+            // List
+            List<string> myGroceryList = new List<string>() { "Milk", "Cheese" };
+            myGroceryList.Add("Paneer");
+            foreach (var item in myGroceryList)
+            {
+                Console.WriteLine(item);
+            }
+
+            //IEnumerable
+            IEnumerable<string> myGroceryEnumerable = myGroceryList;
+            Console.WriteLine(myGroceryEnumerable.First());
         }
     }
 }
