@@ -1,25 +1,37 @@
 ﻿using System;
+using dotNetPlayground.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace dotNetPlayground
 {
-    public class Computer
-    {
-        public string Motherboard { get; set; } = string.Empty;
-        public int CPUCores { get; set; } = 0;
-        public bool HasWifi { set; get; } = false;
-        public bool HasLTE { get; set; } = false;
-        public DateTime ReleaseDate { get; set; }
-        public decimal Price { get; set; }
-        public string VideoCard { get; set; } = string.Empty;
-    }
-
     public static class Program
     {
         public static void Main(string[] args)
         {
-            Computer obj = new Computer();
-            obj.Motherboard = "ROG Zephyrus";
-            Console.WriteLine(obj.Motherboard);
+            // Build a configuration object to read from appsettings.json
+            var config = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            // Retrieve the connection string
+            string connectionString = config.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    Console.WriteLine("Connection successful!");
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(
+                        "An error occurred while connecting to the database: " + ex.Message
+                    );
+                }
+            }
         }
     }
 }
