@@ -16,7 +16,13 @@ namespace dotNetPlayground
                 .Build();
 
             // Retrieve the connection string
-            string connectionString = config.GetConnectionString("DefaultConnection");
+            string? connectionString = config.GetConnectionString("DefaultConnection");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                Console.WriteLine("Connection string is missing or empty.");
+                return;
+            }
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
