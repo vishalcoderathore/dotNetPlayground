@@ -1,4 +1,5 @@
 ﻿using System;
+using Dapper;
 using dotNetPlayground.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,10 @@ namespace dotNetPlayground
                 try
                 {
                     connection.Open();
+                    string sqlCommand = "SELECT GETDATE()";
+                    DateTime rightNow = connection.QuerySingle<DateTime>(sqlCommand);
+                    Console.WriteLine(rightNow);
+
                     Console.WriteLine("Connection successful!");
                 }
                 catch (SqlException ex)
