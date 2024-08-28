@@ -25,16 +25,57 @@ namespace dotNetPlayground
                 return;
             }
 
+            // Build Computer object
+            Computer myComputer = new Computer(
+                "ASUS Zephyrus",
+                8,
+                true,
+                false,
+                DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local),
+                1700.00M,
+                "RTX 4070"
+            );
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    string sqlCommand = "SELECT GETDATE()";
-                    DateTime rightNow = connection.QuerySingle<DateTime>(sqlCommand);
-                    Console.WriteLine(rightNow);
+                    string sqlString =
+                        @"
+                        INSERT INTO TutorialAppSchema.Computer(
+                            Motherboard,
+                            CPUCores,
+                            HasWifi,
+                            HasLTE,
+                            ReleaseDate,
+                            Price,
+                            VideoCard
+                        ) VALUES (
+                            @Motherboard,
+                            @CPUCores,
+                            @HasWifi,
+                            @HasLTE,
+                            @ReleaseDate,
+                            @Price,
+                            @VideoCard
+                        )";
 
-                    Console.WriteLine("Connection successful!");
+                    Console.WriteLine(sqlString);
+                    int result = connection.Execute(
+                        sqlString,
+                        new
+                        {
+                            myComputer.Motherboard,
+                            myComputer.CPUCores,
+                            myComputer.HasWifi,
+                            myComputer.HasLTE,
+                            myComputer.ReleaseDate,
+                            myComputer.Price,
+                            myComputer.VideoCard
+                        }
+                    );
+                    Console.WriteLine(result);
                 }
                 catch (SqlException ex)
                 {
