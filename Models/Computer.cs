@@ -3,15 +3,18 @@ namespace dotNetPlayground.Models
     public class Computer
     {
         // Properties
-        public string Motherboard { get; set; }
+        public int ComputerId { get; set; }
+        public string? Motherboard { get; set; }
         public int CPUCores { get; set; } = 0;
         public bool HasWifi { get; set; } = false;
         public bool HasLTE { get; set; } = false;
         public DateTime ReleaseDate { get; set; }
         public decimal Price { get; set; }
-        public string VideoCard { get; set; }
+        public string? VideoCard { get; set; }
 
         // Constructor
+        public Computer() { }
+
         public Computer(
             string motherboard,
             int cpuCores,

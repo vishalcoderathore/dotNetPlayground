@@ -17,6 +17,7 @@ namespace dotNetPlayground
 
             // Initialize the DataContextDapper with the configuration
             DataContextDapper dataContextDapper = new DataContextDapper(config);
+            DataContextEF entityFramework = new DataContextEF();
 
             // Build Computer object
             Computer myComputer = new Computer(
@@ -34,16 +35,22 @@ namespace dotNetPlayground
                 // int result = dataContextDapper.InsertComputer(myComputer);
                 // Console.WriteLine(result);
 
-                IEnumerable<Computer> computers = dataContextDapper.GetAllComputers();
-                foreach (Computer computer in computers)
+                //IEnumerable<Computer> computers = dataContextDapper.GetAllComputers();
+                IEnumerable<Computer>? computers = entityFramework.Computer?.ToList<Computer>();
+
+                if (computers != null)
                 {
-                    Console.WriteLine(computer.Motherboard);
-                    Console.WriteLine(computer.CPUCores);
-                    Console.WriteLine(computer.HasWifi);
-                    Console.WriteLine(computer.ReleaseDate);
-                    Console.WriteLine(computer.Price);
-                    Console.WriteLine(computer.VideoCard);
-                    Console.WriteLine(computer.HasLTE);
+                    foreach (Computer computer in computers)
+                    {
+                        Console.WriteLine(computer.ComputerId);
+                        Console.WriteLine(computer.Motherboard);
+                        Console.WriteLine(computer.CPUCores);
+                        Console.WriteLine(computer.HasWifi);
+                        Console.WriteLine(computer.ReleaseDate);
+                        Console.WriteLine(computer.Price);
+                        Console.WriteLine(computer.VideoCard);
+                        Console.WriteLine(computer.HasLTE);
+                    }
                 }
             }
             catch (Exception ex)

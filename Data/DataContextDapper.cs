@@ -57,7 +57,8 @@ namespace dotNetPlayground.Data
             using (IDbConnection connection = CreateConnection())
             {
                 string sqlSelect =
-                    @"SELECT Computer.Motherboard,
+                    @"SELECT Computer.ComputerId, 
+                             Computer.Motherboard,
                              Computer.CPUCores,
                              Computer.HasWifi,
                              Computer.HasLTE,
