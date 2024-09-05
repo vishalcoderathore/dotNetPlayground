@@ -8,26 +8,20 @@ public class DataContextEF : DbContext
 {
     public DbSet<Computer>? Computer { get; set; }
 
+    private readonly string _config;
+
+    public DataContextEF(IConfiguration config)
+    {
+        _config =
+            config.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string is missing or empty");
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var config = new ConfigurationBuilder()
-            .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
-
         if (!optionsBuilder.IsConfigured)
         {
-            string? connectionString = config.GetConnectionString("DefaultConnection"); // Ensure this matches your appsettings.json
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new InvalidOperationException(
-                    "The connection string 'DefaultConnection' was not found."
-                );
-            }
-            optionsBuilder.UseSqlServer(
-                connectionString,
-                options => options.EnableRetryOnFailure()
-            );
+            optionsBuilder.UseSqlServer(_config, options => options.EnableRetryOnFailure());
         }
     }
 

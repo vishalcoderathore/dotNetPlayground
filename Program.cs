@@ -17,7 +17,7 @@ namespace dotNetPlayground
 
             // Initialize the DataContextDapper with the configuration
             DataContextDapper dataContextDapper = new DataContextDapper(config);
-            DataContextEF entityFramework = new DataContextEF();
+            DataContextEF entityFramework = new DataContextEF(config);
 
             // Build Computer object
             Computer myComputer = new Computer(
