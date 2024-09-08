@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using static System.Console;
 
 namespace DotNetAPI.Controllers;
 
@@ -6,7 +7,10 @@ namespace DotNetAPI.Controllers;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    public UserController() { }
+    public UserController(IConfiguration config)
+    {
+        WriteLine(config.GetConnectionString("DefaultConnection"));
+    }
 
     [HttpGet("GetUsers/{testValue}")]
     public string[] GetUsers(string testValue)
