@@ -1,4 +1,5 @@
 using DotNetAPI.Data;
+using DotNetAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using static System.Console;
 
@@ -16,16 +17,32 @@ public class UserController : ControllerBase
         _dapper = new DataContextDapper(config);
     }
 
-    [HttpGet("TestConnection")]
-    public DateTime TestConnection()
+    [HttpGet("GetUsers")]
+    public IEnumerable<User> GetUsers()
     {
-        return _dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
+        string sql =
+            @"
+            SELECT [UserId],
+                [FirstName],
+                [LastName],
+                [Email],
+                [Gender],
+                [Active] 
+            from TutorialAppSchema.Users
+        ";
+        IEnumerable<User> users = _dapper.LoadData<User>(sql);
+        return users;
     }
 
-    [HttpGet("GetUsers/{testValue}")]
-    public string[] GetUsers(string testValue)
+    [HttpGet("GetSingleUser/{userId}")]
+    public User GetSingleUser(int userId)
     {
-        string[] data = ["abc", "def", "xyz1234", testValue];
-        return data;
+        string sql =
+            @"
+        SELECT * FROM TutorialAppSchema.Users where UserId = '"
+            + userId
+            + "';";
+        User user = _dapper.LoadDataSingle<User>(sql);
+        return user;
     }
 }

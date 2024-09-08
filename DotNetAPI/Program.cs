@@ -19,7 +19,8 @@ builder.Services.AddCors(
                         "http://localhost:4200",
                         "http://localhost:3000",
                         "http://localhost:8000",
-                        "http://localhost:8080"
+                        "http://localhost:8080",
+                        "http://localhost:5000"
                     )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
@@ -62,8 +63,3 @@ app.MapControllers();
 //app.MapGet("/weatherforecast", () => { }).WithName("GetWeatherForecast").WithOpenApi();
 
 app.Run();
-
-public record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
