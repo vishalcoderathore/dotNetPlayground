@@ -1,4 +1,5 @@
 using DotNetAPI.Data;
+using DotNetAPI.Dtos;
 using DotNetAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using static System.Console;
@@ -73,7 +74,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("AddUser")]
-    public IActionResult AddUser(User user)
+    public IActionResult AddUser(UserToAddDto user)
     {
         // Manually constructing the SQL string with user data
         string sql =
