@@ -45,4 +45,55 @@ public class UserController : ControllerBase
         User user = _dapper.LoadDataSingle<User>(sql);
         return user;
     }
+
+    [HttpPut("EditUser")]
+    public IActionResult EditUser(User user)
+    {
+        string sql =
+            $@"
+        UPDATE TutorialAppSchema.Users
+        SET 
+            [FirstName] = '{user.FirstName}',
+            [LastName] = '{user.LastName}',
+            [Email] = '{user.Email}',
+            [Gender] = '{user.Gender}',
+            [Active] = '{user.Active}'
+        WHERE UserId = {user.UserId};";
+
+        bool isSuccess = _dapper.ExecuteSql(sql);
+
+        if (isSuccess)
+        {
+            return Ok();
+        }
+        else
+        {
+            return BadRequest("User could not be updated.");
+        }
+    }
+
+    [HttpPut("AddUser")]
+    public IActionResult AddUser(User user)
+    {
+        // Manually constructing the SQL string with user data
+        string sql =
+            $@"
+        INSERT INTO TutorialAppSchema.Users 
+            ([FirstName], [LastName], [Email], [Gender], [Active])
+        VALUES 
+            ('{user.FirstName}', '{user.LastName}', '{user.Email}', '{user.Gender}', '{user.Active}');";
+
+        // Executing the SQL string
+        bool isSuccess = _dapper.ExecuteSql(sql);
+
+        // Returning the appropriate response
+        if (isSuccess)
+        {
+            return Ok("User added successfully.");
+        }
+        else
+        {
+            return BadRequest("Failed to add user.");
+        }
+    }
 }
