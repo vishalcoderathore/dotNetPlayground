@@ -19,5 +19,6 @@ public class DataContextEF : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("TutorialAppSchema");
+        modelBuilder.Entity<User>().ToTable("Users", "TutorialAppSchema").HasKey(u => u.UserId);
     }
 }
