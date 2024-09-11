@@ -97,4 +97,27 @@ public class UserController : ControllerBase
             return BadRequest("Failed to add user.");
         }
     }
+
+    [HttpDelete("DeleteUser/{userId}")]
+    public IActionResult DeleteUser(int userId)
+    {
+        // Constructing the SQL string to delete the user by userId
+        string sql =
+            $@"
+    DELETE FROM TutorialAppSchema.Users 
+    WHERE UserId = {userId};";
+
+        // Executing the SQL string
+        bool isSuccess = _dapper.ExecuteSql(sql);
+
+        // Returning the appropriate response
+        if (isSuccess)
+        {
+            return Ok($"User with ID {userId} deleted successfully.");
+        }
+        else
+        {
+            return BadRequest($"Failed to delete user with ID {userId}.");
+        }
+    }
 }
