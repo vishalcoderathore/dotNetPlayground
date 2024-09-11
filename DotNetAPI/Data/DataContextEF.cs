@@ -20,5 +20,7 @@ public class DataContextEF : DbContext
     {
         modelBuilder.HasDefaultSchema("TutorialAppSchema");
         modelBuilder.Entity<User>().ToTable("Users", "TutorialAppSchema").HasKey(u => u.UserId);
+        modelBuilder.Entity<UserJobInfo>().HasKey(u => u.UserId);
+        modelBuilder.Entity<UserSalary>().HasKey(u => u.UserId);
     }
 }
