@@ -16,6 +16,17 @@ public class DataContextEF : DbContext
     public virtual DbSet<UserJobInfo> UserJobInfo { get; set; }
     public virtual DbSet<UserSalary> UserSalary { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(
+                _config.GetConnectionString("DefaultConnection"),
+                optionsBuilder => optionsBuilder.EnableRetryOnFailure()
+            );
+        }
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("TutorialAppSchema");
