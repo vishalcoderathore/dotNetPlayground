@@ -1,65 +1,54 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add services to the container
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 // Setup CORS
-builder.Services.AddCors(
-    (options) =>
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevCors", corsBuilder =>
     {
-        options.AddPolicy(
-            "DevCors",
-            (corsBuilder) =>
-            {
-                corsBuilder
-                    .WithOrigins(
-                        "http://localhost:4200",
-                        "http://localhost:3000",
-                        "http://localhost:8000",
-                        "http://localhost:8080",
-                        "http://localhost:5000"
-                    )
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
-            }
-        );
-        options.AddPolicy(
-            "ProdCors",
-            (corsBuilder) =>
-            {
-                corsBuilder
-                    .WithOrigins("https://myProductionSite.com")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
-            }
-        );
-    }
-);
+        corsBuilder
+            .WithOrigins(
+                "http://localhost:4200",
+                "http://localhost:3000",
+                "http://localhost:8000",
+                "http://localhost:8080",
+                "http://localhost:5000"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials(); // Use if you need credentials (cookies, etc.)
+    });
+
+    options.AddPolicy("ProdCors", corsBuilder =>
+    {
+        corsBuilder
+            .WithOrigins("https://myProductionSite.com")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials(); // Use if you need credentials
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
+    app.UseHttpsRedirection(); // Ensure HTTPS redirection comes before UseCors
     app.UseCors("DevCors");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 else
 {
+    app.UseHttpsRedirection(); // Ensure HTTPS redirection comes before UseCors
     app.UseCors("ProdCors");
-    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
-
 app.MapControllers();
-
-//app.MapGet("/weatherforecast", () => { }).WithName("GetWeatherForecast").WithOpenApi();
 
 app.Run();
