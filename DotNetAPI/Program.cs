@@ -1,9 +1,22 @@
+using DotNetAPI.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+// Setup database context (DataContextEF)
+builder.Services.AddDbContext<DataContextEF>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register the UserRepository for dependency injection
+builder.Services.AddScoped<UserRepository>();
+
+// Add AutoMapper with the assembly containing the profiles (if not already added)
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Setup CORS
 builder.Services.AddCors(options =>

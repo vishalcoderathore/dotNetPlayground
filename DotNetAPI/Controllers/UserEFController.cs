@@ -11,33 +11,32 @@ namespace DotNetAPI.Controllers;
 [Route("[controller]")]
 public class UserEFController : ControllerBase
 {
-    readonly DataContextEF _entityFramework;
-    readonly IMapper _mapper;
+    private readonly UserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public UserEFController(IConfiguration config)
+    public UserEFController(IConfiguration config, IMapper mapper)
     {
-        _entityFramework = new DataContextEF(config);
-        _mapper = new Mapper(new MapperConfiguration(cfg => {
-            cfg.CreateMap<UserToAddDto, User>();
-        }));
+        var context = new DataContextEF(config);
+        _userRepository = new UserRepository(context);
+        _mapper = mapper;
     }
 
     [HttpGet("GetUsers")]
-    public ActionResult<IEnumerable<User>> GetUsers()
+    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
-        var users = _entityFramework.Users.ToList();
-        if (users.Count == 0)
+        var users = await _userRepository.GetUsersAsync();
+        if (!users.Any())
         {
-            return NoContent(); // Return 204 No Content if no users are found
+            return NoContent();
         }
 
-        return Ok(users); // Return 200 OK with the list of users
+        return Ok(users);
     }
 
     [HttpGet("GetSingleUser/{userId}")]
-    public ActionResult<User> GetSingleUser(int userId)
+    public async Task<ActionResult<User>> GetSingleUser(int userId)
     {
-        User? user = _entityFramework.Users.FirstOrDefault((u) => u.UserId == userId);
+        User? user = await _userRepository.GetUserById(userId);
         if (user != null)
         {
             return Ok(user);
@@ -50,16 +49,13 @@ public class UserEFController : ControllerBase
     public async Task<ActionResult> EditUser(User user)
     {
         // Find the user in the database
-        User? existingUser = await _entityFramework.Users.FirstOrDefaultAsync(u =>
-            u.UserId == user.UserId
-        );
+        var existingUser = await _userRepository.GetUserById(user.UserId);
 
         if (existingUser == null)
         {
             return NotFound($"User with ID {user.UserId} not found.");
         }
 
-        // Update the user's properties
         existingUser.FirstName = user.FirstName;
         existingUser.LastName = user.LastName;
         existingUser.Email = user.Email;
@@ -68,7 +64,7 @@ public class UserEFController : ControllerBase
 
         try
         {
-            await _entityFramework.SaveChangesAsync();
+            await _userRepository.EditUserAsync(existingUser);
             return Ok("User updated successfully.");
         }
         catch (Exception ex)
@@ -86,18 +82,15 @@ public class UserEFController : ControllerBase
             // Map the DTO to the User model
             var user = _mapper.Map<User>(userDto);
 
-            // Add the new user to the Users DbSet
-            await _entityFramework.Users.AddAsync(user);
-
-            // Save the changes to the database
-            await _entityFramework.SaveChangesAsync();
+            // Use the repository to add the user
+            await _userRepository.AddUserAsync(user);
 
             return CreatedAtAction(nameof(GetSingleUser), new { userId = user.UserId }, user);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // Log the exception (if needed)
-            return BadRequest("An error occurred while adding the new user.");
+            return BadRequest("An error occurred while adding the new user." + ex);
         }
     }
 
@@ -107,7 +100,7 @@ public class UserEFController : ControllerBase
         try
         {
             // Find the user in the database
-            var user = await _entityFramework.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            var user = await _userRepository.GetUserById(userId);
 
             // If user not found, return 404 Not Found
             if (user == null)
@@ -116,10 +109,7 @@ public class UserEFController : ControllerBase
             }
 
             // Remove the user from the database
-            _entityFramework.Users.Remove(user);
-
-            // Save changes to the database
-            await _entityFramework.SaveChangesAsync();
+            await _userRepository.DeleteUserAsync(user);
 
             return Ok($"User with ID {userId} deleted successfully.");
         }
