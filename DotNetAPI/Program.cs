@@ -1,4 +1,5 @@
 using DotNetAPI.Data;
+using DotNetAPI.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +46,8 @@ builder.Services.AddCors(options =>
             .AllowCredentials(); // Use if you need credentials
     });
 });
+
+builder.Services.AddScoped<IUserRespository, UserRepository>();
 
 var app = builder.Build();
 
