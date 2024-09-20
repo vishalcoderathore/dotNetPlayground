@@ -1,9 +1,10 @@
+using DotNetAPI.Data.Interfaces;
 using DotNetAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetAPI.Data;
 
-public class UserRepository
+public class UserRepository : IUserRespository
 {
     private readonly DataContextEF _context;
 
